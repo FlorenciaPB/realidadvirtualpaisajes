@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portales de Aperture Science 360 - A-Frame</title>
+  <!-- Cargar A-Frame -->
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <style>
+    /* Estilo CSS para dar el brillo energético característico de los portales de Portal */
+    .portal-blue {
+      animation: pulse-blue 2s infinite alternate;
+    }
+    .portal-orange {
+      animation: pulse-orange 2s infinite alternate;
+    }
+    @keyframes pulse-blue {
+      0% { emissive: #0088ff; emissiveIntensity: 0.8; }
+      100% { emissive: #00ffff; emissiveIntensity: 2.0; }
+    }
+    @keyframes pulse-orange {
+      0% { emissive: #ff4400; emissiveIntensity: 0.8; }
+      100% { emissive: #ffaa00; emissiveIntensity: 2.0; }
+    }
+  </style>
+</head>
+<body>
+  <a-scene>
+    <!-- Fondo inmersivo dinámico 360° (Inicia con la Montaña) -->
+    <a-sky id="immersive-sky" src="photo1.jpg"></a-sky>
+    
+    <!-- Iluminación general -->
+    <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
+    <a-light type="directional" position="0 4 2" intensity="0.4"></a-light>
+
+    <!-- Cámara situada en el centro con Cursor de Mirada (Gaze / Fuse) -->
+    <a-entity camera look-controls position="0 1.6 0">
+      <a-cursor 
+        id="gaze-cursor"
+        fuse="true" 
+        fuse-timeout="1500" 
+        position="0 0 -1"
+        geometry="primitive: ring; radiusInner: 0.015; radiusOuter: 0.025"
+        material="color: #ffffff; shader: flat">
+        <!-- Animación de carga al enfocar -->
+        <a-animation begin="fusing" easing="ease-in" attribute="scale" dur="1500" fill="backwards" from="1 1 1" to="0.2 0.2 0.2"></a-animation>
+      </a-cursor>
+    </a-entity>
+
+    <!-- MINI PORTALES DE APERTURE SCIENCE FLOTANTES -->
+    <a-entity position="0 1.6 0">
+      
+      <!-- PORTAL 1: AZUL (Cyberpunk) -->
+      <a-entity position="-1.2 0 -2" rotation="0 35 0">
+        <!-- Anillo exterior brillante clásico azul -->
+        <a-ring radius-inner="0.22" radius-outer="0.3" color="#00aaff" material="shader: flat; emissive: #00aaff; emissiveIntensity: 0.8"></a-ring>
+        <!-- Interior del portal mostrando la textura del otro mundo -->
+        <a-circle class="clickable portal" data-img="photo2.jpg" src="photo2.jpg" radius="0.22" material="shader: flat"></a-circle>
+      </a-entity>
+
+      <!-- PORTAL 2: NARANJA (Montaña) -->
+      <a-entity position="0 0 -2" rotation="0 0 0">
+        <!-- Anillo exterior brillante clásico naranja -->
+        <a-ring radius-inner="0.22" radius-outer="0.3" color="#ff6600" material="shader: flat; emissive: #ff6600; emissiveIntensity: 0.8"></a-ring>
+        <!-- Interior del portal -->
+        <a-circle class="clickable portal" data-img="photo1.jpg" src="photo1.jpg" radius="0.22" material="shader: flat"></a-circle>
+      </a-entity>
+
+      <!-- PORTAL 3: VERDE / NEUTRO (Bosque Místico) -->
+      <a-entity position="1.2 0 -2" rotation="0 -35 0">
+        <!-- Anillo exterior brillante estilo Aperture -->
+        <a-ring radius-inner="0.22" radius-outer="0.3" color="#00ff88" material="shader: flat; emissive: #00ff88; emissiveIntensity: 0.8"></a-ring>
+        <!-- Interior del portal -->
+        <a-circle class="clickable portal" data-img="photo3.jpg" src="photo3.jpg" radius="0.22" material="shader: flat"></a-circle>
+      </a-entity>
+
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const portals = document.querySelectorAll('.portal');
+      const sky = document.getElementById('immersive-sky');
+
+      portals.forEach(portal => {
+        portal.addEventListener('click', () => {
+          const selectedImg = portal.getAttribute('data-img');
+          // Al mirar el portal durante 1.5s, cruzas al nuevo ambiente 360°
+          sky.setAttribute('src', selectedImg);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
